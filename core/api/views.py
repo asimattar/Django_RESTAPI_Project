@@ -37,6 +37,8 @@ class ClientView(APIView):
         client.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+
+
 class ProjectView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -56,6 +58,8 @@ class ProjectView(APIView):
             return Response(response_data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
+    
 class ProjectDetailView(APIView):
     def get(self, request, id, *args, **kwargs):
         try:
@@ -70,7 +74,7 @@ class AssignedProjectsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        projects = Project.objects.all()  # Fetch all projects
+        projects = Project.objects.all()  
         serializer = ProjectSerializer(projects, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
