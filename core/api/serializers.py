@@ -4,11 +4,15 @@ from django.contrib.auth.models import User
 
 class UserWithNameSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    name = serializers.CharField(source='get_full_name', read_only=True)  # Use get_full_name method
+    name = serializers.SerializerMethodField()  # Use get_full_name method
 
     class Meta:
         model = User
         fields = ['id', 'name']
+    
+    def get_name(self, obj):
+        # Safely construct full name
+        return f"{obj.first_name} {obj.last_name}".strip() if obj else ""
 
     def create(self, validated_data):
         # Custom logic to create or update user if needed
