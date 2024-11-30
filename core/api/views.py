@@ -17,10 +17,10 @@ class ClientView(APIView):
             serializer = ClientSerializer(clients, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = ClientSerializer(data=request.data)
+    def post(self, request, *args, **kwargs):
+        serializer = ClientSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save(created_by=request.user)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -59,9 +59,9 @@ class ProjectView(APIView):
 class AssignedProjectsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        projects = request.user.assigned_projects.all()
+    def get(self, request, *args, **kwargs):
+        projects = Project.objects.all()  # Fetch all projects
         serializer = ProjectSerializer(projects, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
 
