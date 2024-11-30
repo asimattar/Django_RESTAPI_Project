@@ -127,6 +127,11 @@ GET /api/projects/
 POST /api/clients/:id/projects/
 ```
 
+3. Get details of a specific project:
+```
+GET /api/projects/:id/
+```
+
 ## Authentication
 
 The API uses Django's session-based authentication. You need to:
