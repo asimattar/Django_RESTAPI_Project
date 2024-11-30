@@ -9,7 +9,10 @@ A Django REST API project implementing a client-project management system with u
 ```
 User (Django's built-in User model)
 ├── id (PK)
-└── username
+├── username
+├── first_name
+├── last_name
+└── email
 
 Client
 ├── id (PK)
@@ -28,16 +31,15 @@ Project
 ```
 
 ### Relationships
-- A Client belongs to one User (created_by)
-- A Client can have many Projects
-- A Project belongs to one Client
-- A Project can have many Users
-- A User can be assigned to many Projects
+- User is Django's built-in model with additional fields like first_name and last_name used to display full names.
+- Client is created by one User (via created_by) and can have many Project entries.
+- Project is linked to a single Client and can involve multiple User entries via a many-to-many relationship.
 
 ## How to Run the Project
 
 ### Prerequisites
 - Python 3.8 or higher
+- Django 5.1+
 - MySQL database
 
 ### Setup Steps
@@ -48,32 +50,41 @@ git clone <repository-url>
 cd <project-directory>
 ```
 
-2. Install dependencies:
+2. Create and activate a virtual environment:
 ```bash
-npm run setup
+python -m venv venv
+source venv/bin/activate
 ```
 
 3. Configure the database:
 - Create a MySQL database
 - Update the database settings in `core/settings.py`
 
-4. Run migrations:
+4. Install dependencies:
 ```bash
-npm run makemigrations
-npm run migrate
+pip install -r requirements.txt
 ```
 
-5. Create a superuser:
+5. Apply migrations:
 ```bash
-python3 manage.py createsuperuser
+python manage.py makemigrations
+python manage.py migrate
 ```
 
-6. Start the development server:
+6. Create a superuser:
 ```bash
-npm start
+python manage.py createsuperuser
 ```
 
-The server will start at `http://localhost:3000`
+7. Start the development server:
+```bash
+python manage.py runserver
+```
+
+8. Access the application:
+
+- API Base URL: http://127.0.0.1:8000/api/
+- Django Admin Panel: http://127.0.0.1:8000/admin/
 
 ## API Endpoints
 
@@ -126,28 +137,19 @@ The API uses Django's session-based authentication. You need to:
 
 ```
 ├── api/
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── client.py
-│   │   └── project.py
-│   ├── serializers/
-│   │   ├── __init__.py
-│   │   ├── client.py
-│   │   ├── project.py
-│   │   └── user.py
-│   ├── views/
-│   │   ├── __init__.py
-│   │   ├── client.py
-│   │   └── project.py
+│   ├── serializers.py
+│   ├── views.py
 │   ├── urls.py
+│   ├── models.py
 │   └── __init__.py
 ├── core/
-│   ├── __init__.py
 │   ├── settings.py
 │   ├── urls.py
+│   ├── wsgi.py
 │   ├── asgi.py
-│   └── wsgi.py
+│   └── __init__.py
 ├── manage.py
 ├── requirements.txt
-└── package.json
+└── README.md
+
 ```
